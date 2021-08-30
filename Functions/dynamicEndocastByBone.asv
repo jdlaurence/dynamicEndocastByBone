@@ -17,8 +17,8 @@
 % sure their names follow the format: locatornameXX (must end in a number).
 %
 % Inputs
-%   datapath
-%   XYZfile
+%   datapath: string - where are files located 
+%   XYZfile: 
 %   RBTfile
 %   refbone
 %   freezeIncrement
@@ -160,9 +160,10 @@ else
     PathName = datapath;
     cd(PathName);
     try % no header
-    rbt = csvread(RBTfile,0,0);
+        rbt = csvread(RBTfile,0,0);
     catch % header
-        
+        rbt = csvread(RBTfile,1,0);
+    end
     if size(rbt,2) ~= 16
         error('Please use default RBT export settings from XMALab (no frames column)')
     end
@@ -355,8 +356,6 @@ if filter
     end
 end
         
-    
-
 %% file save
 FinalVolumes(:,1) = FrameNumbers;
 
@@ -373,18 +372,13 @@ end
 
 dataout = array2table(FinalVolumes,'VariableNames',varNames);
 
+% Create save path if it doesn't exist
+if ~isfolder(DataPath)
+    mkdir(DataPath)
+end
+
 cd(DataPath);
 writetable(dataout,DataFile);
 disp('All done!')
 
 end
-
-
-function [header] = hasHeader(filepath)
-    if 
-        
-        header = true;
-    else
-        header = false;
-    end
-

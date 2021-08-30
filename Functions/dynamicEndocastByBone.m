@@ -17,15 +17,14 @@
 % sure their names follow the format: locatornameXX (must end in a number).
 %
 % Inputs
-%   datapath
-%   XYZfile
-%   RBTfile
-%   refbone
-%   freezeIncrement
-%   savepath
-%   savefile
-%   objFolder
-%
+%   datapath: string - where are files located 
+%   XYZfile: string - path of XYZ locator coordinates (output of maya)
+%   RBTfile: string - path of reference bone RBT file (from XMALab)
+%   refbone: string - name of reference bone in Column names of XYZ file
+%   freezeIncrement: double - >0 integer of freeze increment
+%   savepath: string - where new files should be saved
+%   savefile: string - filename of output 
+%   objFolderPath: string (optional - where to save obj files
 %
 %
 % Example usage:
