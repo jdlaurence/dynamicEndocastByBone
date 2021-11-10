@@ -6,7 +6,11 @@ This document describes the workflow and functions in detail, and provides instr
 
 In essense, `dynamicEndocastByBone` asks: what happens to oral cavity volume when you 'freeze' a specific bone for a short period of time? The difference between the un-frozen volume change and the frozen volume change is, by definition, capturing the impact of the frozen bone's motion on oral volume change. 
 
-## Function details
+## Before running the script
+
+....
+
+## Inputs and call syntax
 
 `dynamicEndocastByBone` supports both GUI and command line initialization. For GUI-based interaction, simply run this in the MATLAB console:
 ```matlab
@@ -27,4 +31,4 @@ In either case, the function requires the following inputs:
 7. `savefile` - *string* - 
 8. `objFolder` - *string* - 
 
-## Before running the script
+
