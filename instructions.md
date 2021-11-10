@@ -8,7 +8,7 @@ In essense, `dynamicEndocastByBone` asks: what happens to oral cavity volume whe
 
 ## dynamicEndocastByBone function details
 
-`dynamicEndocastByBone` supports both GUI and command line initialization. For GUI-based interaction, simply run this in the console:
+`dynamicEndocastByBone` supports both GUI and command line initialization. For GUI-based interaction, simply run this in the MATLAB console:
 ```matlab
 dynamicEndocastByBone
 ```
