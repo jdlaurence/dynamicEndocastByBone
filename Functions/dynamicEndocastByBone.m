@@ -1,6 +1,6 @@
 %% dynamicEndocastByBone
 
-% This script integrates with dynamicEndocast (by Ariel Camp and Peter
+% This script is built off of dynamicEndocast (by Ariel Camp and Peter
 % Falkingham), and calculates the specific contribution of indvidual bones
 % to the change in volume of the endocast. It works by 'freezing' the
 % motion of individual bones (or regions of locators) relative to a
