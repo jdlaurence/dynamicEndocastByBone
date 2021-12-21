@@ -8,7 +8,7 @@ In essense, `dynamicEndocastByBone` asks: what happens to oral cavity volume whe
 
 ## Before running the script
 
-....
+### Determine optimal freeze increment
 
 ## Inputs and call syntax
 
@@ -31,4 +31,4 @@ In either case, the function requires the following inputs:
 7. `savefile` - *string* - 
 8. `objFolder` - *string* - 
 
-
+## Calculate RCVC
