@@ -32,3 +32,6 @@ In either case, the function requires the following inputs:
 8. `objFolder` - *string* - 
 
 ## Calculate RCVC
+
+## Visual checks in Maya
+Use 'exportAlphaShapeAsOBJ.m' and 'impHullsNew.mel' to verify that the alpha hulls for each frozen bone are behaving as anticipated.
