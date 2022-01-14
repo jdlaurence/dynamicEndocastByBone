@@ -241,8 +241,7 @@ else
     
     % Save info
     DataPath = savepath;
-    DataFile = savefile;
-    
+    DataFile = savefile;   
     
     if ~isempty(objFolder) % if saveing objs, make folders
         objexp = 1;
@@ -278,7 +277,7 @@ end
 %Number of frames:
 nbones = length(bones);
 nframes = size(XYZpoints,1);
-npoints = size(XYZpoints,2)/3; %total number of columns, divided by three
+npoints = size(XYZpoints,2)/3;
 hullpoints = zeros(npoints,3);
 alphavolume = zeros(nframes,1);
 FinalVolumes = NaN(nframes,nbones*2+3);
@@ -290,7 +289,7 @@ for x = 1:nframes
         hullpoints(y,:) = XYZpoints(x,y*3-2:y*3);
     end
     [uniquepoints,~,~] = unique(hullpoints,'rows','stable'); %deletes duplicate XYZpoints
-    n=2; %This is the value that determines the maximum radius of curvature, I believe.
+    n=2; %This is the value that determines the maximum radius of curvature
     shp = alphaShape(uniquepoints,n);
     totalvol = volume(shp);
     
@@ -366,13 +365,9 @@ for x = 1:nframes
                   fileout = fullfile(objfoldernames{b+1}, ...
                       ['Alpha_' num2str(FrameNumbers(x)) '_Hull.obj']);
                   exportAlphaShapeAsOBJ(shp,FrameNumbers(x),fileout);          
-            end
-            
+            end            
         end
-        
-        
-    end
-    
+    end   
 end
 
 
