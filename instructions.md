@@ -5,9 +5,8 @@ This document describes the workflow and functions in detail, and provides instr
 ## Before running the script
 You need:   
 * The scripts from this package copied into your MATLAB path.
-* Autodesk Maya and the MayaTools shelf installed
-* Bone mesh models and corresponding rigid body transformations from XMALab  
-* Optional: 3D points from XMALab
+* 3D points, RBTs...
+* ...
 ### Determine optimal freeze increment
 Freeze increments should be selected based upon frequency of behavior (we recommend roughly 10% of behavior duration). Researchers should additionally examine the "delta volume" curves at various freeze increments to check for oversmoothing.
 ## Inputs and call syntax
