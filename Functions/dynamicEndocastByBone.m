@@ -133,10 +133,25 @@ if nargin == 0 % GUIs
     freezeIncrement = inputdlg(prompt,dlgtitle,[1 50],definput);
     freezeIncrement = str2double(freezeIncrement{1});
     
-    % % 7. Get save path % % 
+    % % 7. Filter data? 
+        filteranswer = questdlg('Filter data with a 3-frame moving average?', ...
+	'Moving Average Filter', ...
+	'Yes','No','Yes');
+    % Handle response
+    switch filteranswer
+        case 'Yes'
+            filter = true;
+        case 'No'
+            filter = false;
+        otherwise
+            filter = false;
+            disp('Defaulting to NO filter')
+    end
+    
+    % % 8. Get save path % % 
     [DataFile,DataPath] = uiputfile('*.csv','Save data');
     
-    % % 8. Save obj files?  % % 
+    % % 9. Save obj files?  % % 
     answer = questdlg('Export volumes as .obj files?', ...
 	'OBJ Export', ...
 	'Yes','No','No');
