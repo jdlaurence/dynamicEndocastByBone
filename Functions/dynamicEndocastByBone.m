@@ -248,10 +248,14 @@ else
         objexp = 1;
         objfoldernames = {};
         objfoldernames{1} = fullfile(objFolder,'Reference');
-        mkdir(objfoldernames{1});
+        if ~isfolder(objfoldernames{1})
+            mkdir(objfoldernames{1});
+        end
         for b = 1:length(bones)
             objfoldernames{b+1} = fullfile(objFolder,['Frozen_' bones{b}]);
-            mkdir(objfoldernames{b+1});
+            if ~isfolder(objfoldernames{b+1})
+                mkdir(objfoldernames{b+1});
+            end
         end
     else
        objexp = false; 
