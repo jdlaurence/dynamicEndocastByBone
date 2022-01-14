@@ -1,15 +1,15 @@
-# Dynamic Endocast By Bone -- Details and Instructions
+# dynamicEndocastByBone -- Details and Instructions
 
 This document describes the workflow and functions in detail, and provides instructions for its use.
 
-## Logic and explanation
-
-In essense, `dynamicEndocastByBone` asks: what happens to oral cavity volume when you 'freeze' a specific bone for a short period of time? The difference between the un-frozen volume change and the frozen volume change is, by definition, capturing the impact of the frozen bone's motion on oral volume change. 
-
 ## Before running the script
-
+You need:   
+* The scripts from this package copied into your MATLAB path.
+* Autodesk Maya and the MayaTools shelf installed
+* Bone mesh models and corresponding rigid body transformations from XMALab  
+* Optional: 3D points from XMALab
 ### Determine optimal freeze increment
-
+Freeze increments should be selected based upon frequency of behavior (we recommend roughly 10% of behavior duration). Researchers should additionally examine the "delta volume" curves at various freeze increments to check for oversmoothing.
 ## Inputs and call syntax
 
 `dynamicEndocastByBone` supports both GUI and command line initialization. For GUI-based interaction, simply run this in the MATLAB console:
