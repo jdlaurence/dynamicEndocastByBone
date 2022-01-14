@@ -1,12 +1,11 @@
 # dynamicEndocastByBone -- Details and Instructions
-
-This document describes the workflow and functions in detail, and provides instructions for its use.
+_Note: This document is in the process of being updated, stay tuned for additional detail/tutorials_
 
 ## Before running the script
 You need:   
 * The scripts from this package copied into your MATLAB path.
-* 3D points defining the endocast
-* RBT of the reference bone
+* 3D points defining the endocast (from Autodesk Maya)
+* RBT of the reference bone (from XMALab)
 ### Determine optimal freeze increment
 Freeze increments should be selected based upon frequency of behavior (we recommend roughly 10% of behavior duration). Researchers should additionally examine the "delta volume" curves at various freeze increments to check for oversmoothing.
 ## Inputs and call syntax
