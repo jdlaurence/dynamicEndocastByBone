@@ -31,6 +31,13 @@ In either case, the function requires the following inputs:
 8. `objFolder` - *string* - 
 
 ## Calculate RCVC
+The instantaneous relative contribution to volume change (RCVC) of the _i_ th bone can be calculated using the following equation:
+![RCVC equation](https://user-images.githubusercontent.com/69591714/149567304-6a9bf924-9ff1-4e39-8408-d8fced3c168c.PNG)
+where 
+&Delta;_VFull_ is the change in endocast volume without any bones frozen
+&Delta;_VFrozenBone i/j_ is the change in endocast volume with the _i_ th or _j_ th bone frozen
+and _n_ is the number of bones frozen (i.e., does not include the reference bone).
+
 
 ## Visual checks in Maya
 Use 'exportAlphaShapeAsOBJ.m' and 'impHullsNew.mel' to verify that the alpha hulls for each frozen bone are behaving as anticipated.
