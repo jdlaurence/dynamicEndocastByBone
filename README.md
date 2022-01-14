@@ -8,6 +8,8 @@ _**Quantify the contribution of individual bones to oral cavity volume change in
 
 **Credits:** Concieved of by Katie Whitlow and J.D. Laurence-Chasen. Code written and maintained by J.D. Laurence-Chasen. Based on the original dynamicEndocast method by Ariel Camp, detailed in [Camp et al. (2015)](https://www.pnas.org/content/112/28/8690).
 
+**Contact:** jdlaurence@uchicago.edu for code-related questions, kwhitlow@uchicago.edu for any other questions
+
 **[Go to instructions](https://github.com/jdlaurence/dynamicEndocastByBone/blob/main/instructions.md)**
 
 ![RCVC](https://user-images.githubusercontent.com/53494838/149544056-bbe0d0e4-7e69-44cc-bb6b-6d34200e7941.png)
