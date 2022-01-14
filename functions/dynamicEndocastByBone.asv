@@ -45,7 +45,7 @@
 % Add volume export functionality
 % 2/18/2021
 
-function [dataout] = dynamicEndocastByBone(datapath,XYZfile,RBTfile,refbone,freezeIncrement,filter,savepath,savefile,objFolder,varargin)
+function [dataout] = dynamicEndocastByBone(datapath,XYZfile,RBTfile,refbone,freezeIncrement,savepath,savefile,objFolder,varargin)
 
 %% Parse Inputs And Run GUIs if necessary
 
@@ -63,9 +63,7 @@ if nargin == 0 % GUIs
     catch % header
        rbt = csvread(RBTfile,1,0); 
     end
-    if size(rbt,2) == 17 % there are frame numbers
-        rbt = rbt(:,2:end);
-    elseif size(rbt,2) ~= 16
+    if size(rbt,2) ~= 16
         error('Please use default RBT export settings from XMALab (no frames column)')
     end
     
@@ -74,19 +72,7 @@ if nargin == 0 % GUIs
     % number followed by _tx/_ty/_tz
     XYZfile = readtable(FileName,'delimiter','comma');
     varnames = XYZfile.Properties.VariableNames; % get column names
-    XYZfile = csvread(FileName,1,0); % re-read file as array (instead of table)
-    if XYZfile(:,end) == 0 %check if there's an extra column of zeros
-        XYZfile = XYZfile(:,1:end-1);
-    end
-    % Are there frame numbers?
-    hasFN_XYZ = CheckForFrameNumbers(XYZfile);
-    if hasFN_XYZ
-        varnames = varnames(2:end)'; % first var is Frame
-    elseif ~hasFN_XYZ
-        varnames = varnames';
-    else
-        error('Irregular number of columns in XYZ point file')
-    end
+    varnames = varnames(2:end)'; % first var is Frame
     croppedvars = varnames;
     for v = 1:length(varnames)
         croppedvars{v,1} = varnames{v}(1:end-3); % crop off _tx/_ty/_tz
@@ -164,9 +150,9 @@ switch answer
         disp('Defaulting to NO export')
 end
     
-elseif nargin ~= 9
+elseif nargin ~= 8
     
-    error('Must provide 9 input arguments (see example at start of function)')
+    error('Must provide 8 input arguments (see example at start of function)')
     
 else
     
@@ -178,9 +164,7 @@ else
     catch % header
         rbt = csvread(RBTfile,1,0);
     end
-    if size(rbt,2) == 17 % there are frame numbers
-        rbt = rbt(:,2:end);
-    elseif size(rbt,2) ~= 16
+    if size(rbt,2) ~= 16
         error('Please use default RBT export settings from XMALab (no frames column)')
     end
     
@@ -188,19 +172,8 @@ else
     % Read Locator File
     XYZfile = readtable(FileName,'delimiter','comma');
     varnames = XYZfile.Properties.VariableNames; % get column names
-    XYZfile = csvread(FileName,1,0); % re-read file as array (instead of table)
-    if XYZfile(:,end) == 0 %check if there's an extra column of zeros
-        XYZfile = XYZfile(:,1:end-1);
-    end
-    % Are there frame numbers?
-    hasFN_XYZ = CheckForFrameNumbers(XYZfile);
-    if hasFN_XYZ
-        varnames = varnames(2:end)'; % first var is Frame
-    elseif ~hasFN_XYZ
-        varnames = varnames';
-    else
-        error('Irregular number of columns in XYZ point file')
-    end
+    varnames = varnames(2:end)'; % first var is Frame
+    
     % try to automatically identify bones
     % I'm going to assume the names are alpha characters followed by a
     % number followed by _tx/_ty/_tz
@@ -259,17 +232,31 @@ else
     
 end
 
+% TEMPORARY BUILT IN FILTER
+filter = true;
+
 %% Volumetric calculations
 
+XYZfile = csvread(FileName,1,0); % re-read file as array (instead of table)
+
+if XYZfile(:,end) == 0 %check if there's an extra column of zeros
+    lastCol = size(XYZfile,2)-1;
+else
+    lastCol = size(XYZfile,2);
+end
+
 % Are there frame numbers?
-if hasFN_XYZ %yes
+hasFN = CheckForFrameNumbers(XYZfile);
+if hasFN %yes
     FrameNumbers = XYZfile(:,1);
-    XYZpoints = XYZfile(:,2:end);
-elseif ~hasFN_XYZ % no
+elseif ~hasFN % no
     FrameNumbers = 1:size(XYZfile,1);
     FrameNumbers = FrameNumbers';
-    XYZpoints = XYZfile;
+else
+    error('Irregular number of columns in XYZ file')
 end
+
+XYZpoints = XYZfile(:,2:lastCol);%xyz coordinates from Maya.
 
 %Number of frames:
 nbones = length(bones);
@@ -279,7 +266,7 @@ hullpoints = zeros(npoints,3);
 alphavolume = zeros(nframes,1);
 FinalVolumes = NaN(nframes,nbones*2+3);
 
-for x = 1:nframes
+for x=1:nframes
     
     % Regular volume calculation %
     for y=1:npoints
@@ -372,7 +359,7 @@ for x = 1:nframes
 end
 
 
-%% Filter if toggle on
+%% Filter TEMPORARY, TO BE ADDED AS A TOGGLE
 if filter
     disp('FYI: Data are being smoothed with a 3 frame moving average filter') 
     for i = 1:size(FinalVolumes,2)-1
@@ -411,11 +398,8 @@ function [framenumbers] = CheckForFrameNumbers(X)
         framenumbers = false;
     elseif rem(size(X,2),3) == 1
         % check to make sure it's not a zero column
-        if X(2,1) - X(1,1) == 1
-            framenumbers = true;
-        else
-            framenumbers = nan;
-        end
+        if X(2,
+        framenumbers = true;
     else
         framenumbers = nan;
     end
