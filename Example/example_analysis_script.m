@@ -98,6 +98,7 @@ for b = 1:length(bones)
     title([bones(b) ' RCVC'])
     xlabel('Frame')
     ylabel('RCVC')
+    ylim([0 1])
 end
 
 
