@@ -279,6 +279,8 @@ end
 
 %% Volumetric calculations
 
+disp('Running endocast calculations...')
+
 % Are there frame numbers?
 if hasFN_XYZ %yes
     FrameNumbers = XYZfile(:,1);
@@ -388,7 +390,6 @@ end
 
 %% Filter if toggle on
 if filter
-    disp('FYI: Data are being smoothed with a 3 frame moving average filter') 
     for i = 1:size(FinalVolumes,2)-1
         FinalVolumes(:,i+1) = movmean(FinalVolumes(:,i+1),3);
         
@@ -418,7 +419,7 @@ end
 
 cd(DataPath);
 writetable(dataout,DataFile);
-disp('All done!')
+disp(['All done! Data saved to ' DataFile])
 
 function [framenumbers] = CheckForFrameNumbers(X)
     if rem(size(X,2),3) == 0
