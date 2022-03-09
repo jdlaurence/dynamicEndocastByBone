@@ -1,5 +1,5 @@
-function [tblout] = generateXYZfile(locatorsCTspace,rbt,fileout,frames)
-%generateXYZfile Generate XYZ file for dynamicEndocastByBone
+function [tblout] = generateLocatorFile(locatorsCTspace,rbt,fileout,frames)
+%generateLocatorFile Generate locator XYZ file for dynamicEndocastByBone
 %
 % % NOTE: THIS FUNCTION IS STILL IN BETA, USE AT OWN RISK 
 %
