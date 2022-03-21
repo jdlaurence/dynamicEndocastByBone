@@ -65,6 +65,9 @@ if nargin == 0 % GUIs
     end
     if size(rbt,2) == 17 % there are frame numbers
         rbt = rbt(:,2:end);
+        multRBTs = false;
+    elseif size(rbt,2) == 16
+        multRBTs = false;
     elseif size(rbt,2) > 17 % There are multiple RBTs in the ref rbt
         if rem(size(rbt,2),16) == 1
             % there's a frames column and multiple RBTs
@@ -144,7 +147,7 @@ if nargin == 0 % GUIs
     % % 6. Get freeze increment info % % 
     prompt = {'How many frames do you want the freeze increment to be?'};
     dlgtitle = 'Freeze Increment';
-    definput = {'25'};
+    definput = {'10'};
     freezeIncrement = inputdlg(prompt,dlgtitle,[1 50],definput);
     freezeIncrement = str2double(freezeIncrement{1});
     
@@ -210,6 +213,9 @@ else
     end
     if size(rbt,2) == 17 % there are frame numbers
         rbt = rbt(:,2:end);
+        multRBTs = false;
+    elseif size(rbt,2) == 16
+        multRBTs = false;
     elseif size(rbt,2) > 17 % There are multiple RBTs in the ref rbt
         if rem(size(rbt,2),16) == 1
             % there's a frames column and multiple RBTs
@@ -376,8 +382,8 @@ for x = 1:nframes
             
             pts = XYZpoints(prev_frame,boneloccols{b}); % points to freeze
             
-            currentTm = reshape(rbt(FrameNumbers(x),:),[4 4]); % reference RBT for current frame
-            prevTm = reshape(rbt(FrameNumbers(prev_frame),:),[4 4]); % reference RBT for previous frame
+            currentTm = reshape(rbt(x,:),[4 4]); % reference RBT for current frame
+            prevTm = reshape(rbt(prev_frame,:),[4 4]); % reference RBT for previous frame
             newpts = [];
             
             for i = 1:length(pts)/3 % for each point in bone of interest,, 'freeze',
