@@ -65,8 +65,16 @@ if nargin == 0 % GUIs
     end
     if size(rbt,2) == 17 % there are frame numbers
         rbt = rbt(:,2:end);
-    elseif size(rbt,2) ~= 16
-        error('Please use default RBT export settings from XMALab (no frames column)')
+    elseif size(rbt,2) > 17 % There are multiple RBTs in the ref rbt
+        if rem(size(rbt,2),16) == 1
+            % there's a frames column and multiple RBTs
+            rbt = rbt(:,2:end);
+            multRBTs = true;
+        elseif rem(size(rbt,2),16) == 0
+            multRBTs = true;
+        else
+            error('Please use default RBT export settings from XMALab (no frames column)')
+        end
     end
     
     % % 3. Try to automatically identify bones from row headers % % 
@@ -115,6 +123,13 @@ if nargin == 0 % GUIs
     end
     
     bones(indx) = []; % get rid of reference bone
+    
+    % % 2.2 Isolate reference RBT, if there are multiple RBTs
+    if multRBTs      
+        cols = 16*(1-indx) + 1: 16*(1-indx)+16;
+        rbt = rbt(:,cols);      
+    end
+    
     
     % % 5. Get column indicies of locators grouped by bone/region % % 
     reflocpts = find(contains(varnamesnew,refbone));
@@ -195,8 +210,16 @@ else
     end
     if size(rbt,2) == 17 % there are frame numbers
         rbt = rbt(:,2:end);
-    elseif size(rbt,2) ~= 16
-        error('Please use default RBT export settings from XMALab (no frames column)')
+    elseif size(rbt,2) > 17 % There are multiple RBTs in the ref rbt
+        if rem(size(rbt,2),16) == 1
+            % there's a frames column and multiple RBTs
+            rbt = rbt(:,2:end);
+            multRBTs = true;
+        elseif rem(size(rbt,2),16) == 0
+            multRBTs = true;
+        else
+            error('Please use default RBT export settings from XMALab (no frames column)')
+        end
     end
     
     FileName = XYZfile;
@@ -243,6 +266,12 @@ else
     end
     
     bones(indx) = []; % get rid of reference bone
+    
+    if multRBTs      
+        cols = 16*(1-indx) + 1: 16*(1-indx)+16;
+        rbt = rbt(:,cols);      
+    end
+    
     
     % % Get column indicies of locators grouped by bone/region
     reflocpts = find(contains(varnamesnew,refbone));
