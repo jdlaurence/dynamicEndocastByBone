@@ -114,7 +114,7 @@ if nargin == 0 % GUIs
     end
     
     % % 4. Select reference bone from identified bones % % 
-    bones = unique(varnames_nonums(~cellfun(@isempty,varnames_nonums)));
+    bones = unique(varnames_nonums(~cellfun(@isempty,varnames_nonums)),'stable');
     [indx,tf] = listdlg('PromptString',{'Select the reference bone corresponding to the RBT file you just selected',''...
         'Make sure this list looks correct.',''},...
         'SelectionMode','single','ListString',bones);
@@ -265,7 +265,7 @@ else
         end
     end
     
-    bones = unique(varnames_nonums(~cellfun(@isempty,varnames_nonums)));
+    bones = unique(varnames_nonums(~cellfun(@isempty,varnames_nonums)),'stable');
     indx = find(strcmp(bones,refbone));
     if length(indx) ~= 1
         error('Make sure refbone corresponds to a bone/region name in the locator file')

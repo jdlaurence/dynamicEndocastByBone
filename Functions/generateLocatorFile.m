@@ -45,7 +45,7 @@ if isptsfile % if its a file, separate by column header prefix
  
     croppedvars = varnames';
     for v = 1:length(varnames)
-        croppedvars{v,1} = varnames{v}(1:end-3); % crop off _tx/_ty/_tz
+        croppedvars{v,1} = varnames{v}(1:end-2); % crop off _x/_y/_z (diff than maya version _tx _ty _tz)
     end
     varnamesnew = croppedvars;
     %varnamesnew = unique(croppedvars,'stable'); % get rid of duplicates
@@ -59,7 +59,7 @@ if isptsfile % if its a file, separate by column header prefix
         end
     end
 
-    bones = unique(varnames_nonums);
+    bones = unique(varnames_nonums,'stable');
     
     % now we have bones, let's extract xyz positions and place into
     % individual cells    
