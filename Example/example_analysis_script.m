@@ -25,14 +25,14 @@
 
 % Where are the data files, where do you want to save the output file?
 % Replace with your own paths %
-datapath = 'C:\Users\jdlc7\Documents\GitHub\dynamicEndocastByBone\Example\'; 
-savepath = 'C:\Users\jdlc7\Documents\GitHub\dynamicEndocastByBone\Example\VolumeData';
+datapath = 'C:\Users\jdlc7\Documents\Code\dynamicEndocastByBone\Example\'; 
+savepath = 'C:\Users\jdlc7\Documents\Code\dynamicEndocastByBone\Example\VolumeData';
 
 refbone = 'Vol_NC'; % THIS MUST MATCH THE PREFIX IN THE LOCATOR FILE COLUMN HEADERS
 freezeIncrement = 10; % See Whitlow et al. 2022--experiment with different increments
 filter = true; 
 objFolder = []; % DO NOT save hull OBJs
-
+bridges = []; % do not generate bridges between locators
 trials = {'P1_Trial01', 'P1_Trial02'}; % create a list of trials
 % make sure all trial files (xyz locator, RBT) start with the same prefix
 
@@ -40,7 +40,7 @@ trials = {'P1_Trial01', 'P1_Trial02'}; % create a list of trials
 
 endocast_data = {}; % Output variable 
 
-for t = 1:length(trials) % for every trial
+for t = 1:1 %length(trials) % for every trial
     
     % Get file names
     % (Assumes your locator files are in the format of:
@@ -54,7 +54,7 @@ for t = 1:length(trials) % for every trial
     % Do it
     endocast_data{t} = ...
         dynamicEndocastByBone(datapath, XYZfile, RBTfile, refbone, ...
-        freezeIncrement,filter,savepath,savefile,objFolder);
+        freezeIncrement,filter,savepath,savefile,objFolder,bridges);
 end
 
 %% Step 3. Calculate RCVC

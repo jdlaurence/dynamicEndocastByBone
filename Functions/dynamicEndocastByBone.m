@@ -25,7 +25,7 @@
 %   savepath: string - where new files should be saved
 %   savefile: string - filename of output 
 %   objFolderPath: string (optional - where to save obj files
-%
+%   bridges: cell array: Names of locators to bridge (set to [] for none))
 %
 % Example usage:
 %
@@ -45,7 +45,7 @@
 % Add volume export functionality
 % 2/18/2021
 
-function [dataout] = dynamicEndocastByBone(datapath,XYZfile,RBTfile,refbone,freezeIncrement,filter,savepath,savefile,objFolder,varargin)
+function [dataout] = dynamicEndocastByBone(datapath,XYZfile,RBTfile,refbone,freezeIncrement,filter,savepath,savefile,objFolder,bridges,varargin)
 
 %% Parse Inputs And Run GUIs if necessary
 
@@ -197,7 +197,7 @@ switch answer
         disp('Defaulting to NO export')
 end
     
-elseif nargin ~= 9
+elseif nargin ~= 10
     
     error('Must provide 9 input arguments (see example at start of function)')
     
@@ -289,7 +289,13 @@ else
         boneloccols{b} = find(contains(varnames,bones{b}));
     end
     
-    % Save info
+    % % Get locator bridge info % % 
+    nbridges = size(bridges,1);
+    % bridging settings
+    dist_thresh = 0; % Minimum distance between generated locators
+    max_pts = 10; % Maximum number of  generated locators
+    
+    % % Save info
     DataPath = savepath;
     DataFile = savefile;   
     
@@ -341,6 +347,26 @@ for x = 1:nframes
         hullpoints(y,:) = XYZpoints(x,y*3-2:y*3);
     end
     [uniquepoints,~,~] = unique(hullpoints,'rows','stable'); %deletes duplicate XYZpoints
+    
+    % GENERATE BRIDGES (new option)
+    if nbridges > 0
+        for br = 1:nbridges
+            % get indices for locator endpoints
+            p1idx = find(strcmp(bridges{br,1},varnamesnew));
+            p2idx = find(strcmp(bridges{br,2},varnamesnew));
+            
+            p1 = hullpoints(p1idx,:);
+            p2 = hullpoints(p2idx,:);
+            
+            % calculate bridge
+            midpoints = calcMidpoints(p1, p2, dist_thresh, max_pts);
+            
+            % add to locator set
+            uniquepoints = [uniquepoints; midpoints];
+                        
+        end
+    end
+    
     n=2; %This is the value that determines the maximum radius of curvature
     shp = alphaShape(uniquepoints,n);
     totalvol = volume(shp);
@@ -404,7 +430,27 @@ for x = 1:nframes
             end
             
             [uniquepoints,~,~] = unique(hullpoints,'rows','stable'); %deletes duplicate XYZpoints
-            n=2; %This is the value that determines the maximum radius of curvature, I believe.
+            
+            % GENERATE BRIDGES (new option)
+            if nbridges > 0
+                for br = 1:nbridges
+                    % get indices for locator endpoints
+                    p1idx = find(strcmp(bridges{br,1},varnamesnew));
+                    p2idx = find(strcmp(bridges{br,2},varnamesnew));
+                    
+                    p1 = hullpoints(p1idx,:);
+                    p2 = hullpoints(p2idx,:);
+                    
+                    % calculate bridge
+                    midpoints = calcMidpoints(p1, p2, dist_thresh, max_pts);
+                    
+                    % add to locator set
+                    uniquepoints = [uniquepoints; midpoints];
+                    
+                end
+            end
+            
+            n=2; %This is the value that determines the maximum radius of curvature
             shp = alphaShape(uniquepoints,n);
             totalvolfrozen = volume(shp);
             FinalVolumes(store_frame,b+2) = totalvolfrozen;
@@ -469,3 +515,67 @@ function [framenumbers] = CheckForFrameNumbers(X)
     else
         framenumbers = nan;
     end
+
+function [midpoints] = calcMidpoints(A, B, dist_thresh, max_pts)
+% CalcNMidpoints calculate midpoints of 3D points
+% Function generates a set of 3D points in between the two user-provided
+% endpoints. The user can set the number of generated mid-point through a
+% combination of a minimum distance threshold and/or a max number of
+% points.
+%
+% Inputs
+%   -A,B: endpoints, each of dimension 1x3 (xyz point)
+%   -dist_thresh: minimum distance between points (can set to 0 if user
+%   wants to use max_pts as the cutoff)
+%   -max_pts: maximum number of points to calculated (can set to inf if
+%   user wants to use a distance threshold as the cutoff)
+%
+% Output
+%   -midpoints: calculated midpoints, where columns are x,y,z
+%
+%
+%  written by J.D. Laurence-Chasen 4/13/2022
+%
+
+% make sure max-pts is an odd number
+if max_pts < inf
+    if rem(max_pts,2) == 0
+        max_pts = max_pts + 1;
+    end
+end
+
+d = norm(A-B) / 2; % initial distance
+
+if d < dist_thresh
+    warning("The (high) distance threshold for inter-locator bridges is preventing new locators from being created")
+    midpoints = [];
+else
+    % calculate first midpoint
+    
+    pts = [A; mean([A;B]); B];
+    npts = size(pts,1);
+    d = norm(pts(1,:)-pts(2,:)) / 2;
+    
+    % add additional midpoints until threshold/number of points is reached
+    while d > dist_thresh && (npts-2 + (npts - 3)) < max_pts
+        
+        newpts = [];
+        
+        for p = 1:npts-1
+            
+            p1 = pts(p,:);
+            p2 = pts(p+1,:);
+            p3 = mean([p1;p2]);
+            
+            newpts = [newpts(1:end-1,:); p1; p3; p2];
+            
+        end
+        
+        pts = newpts;
+        
+        % what would distance be with an additional division?
+        d = norm(pts(1,:)-pts(2,:)) / 2;
+        npts = size(pts,1);
+    end
+   midpoints = pts(2:end-1,:); 
+end
