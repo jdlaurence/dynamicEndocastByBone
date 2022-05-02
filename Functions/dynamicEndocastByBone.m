@@ -99,8 +99,16 @@ if nargin == 0 % GUIs
         error('Irregular number of columns in XYZ point file')
     end
     croppedvars = varnames;
+    if strcmp(varnames{1}(end-1:end),'_x')
+        xyzcrop = 2;
+    elseif strcmp(varnames{1}(end-1:end),'tx')
+        xyzcrop = 3;
+    else
+        error('Column headers don''t end in _tx or _x')
+    end
+
     for v = 1:length(varnames)
-        croppedvars{v,1} = varnames{v}(1:end-3); % crop off _tx/_ty/_tz
+        croppedvars{v,1} = varnames{v}(1:end-xyzcrop); % crop off _tx/_ty/_tz or _x _y _z
     end
     varnamesnew = unique(croppedvars,'stable'); % get rid of duplicates
     % find numbers at end of cell
@@ -250,8 +258,16 @@ else
     % number followed by _tx/_ty/_tz
     
     croppedvars = varnames;
+    if strcmp(varnames{1}(end-1:end),'_x')
+        xyzcrop = 2;
+    elseif strcmp(varnames{1}(end-1:end),'tx')
+        xyzcrop = 3;
+    else
+        error('Column headers don''t end in _tx or _x')
+    end
+
     for v = 1:length(varnames)
-        croppedvars{v,1} = varnames{v}(1:end-3); % crop off _tx/_ty/_tz
+        croppedvars{v,1} = varnames{v}(1:end-xyzcrop); % crop off _tx/_ty/_tz or _x _y _z
     end
     varnamesnew = unique(croppedvars,'stable'); % get rid of duplicates
     
