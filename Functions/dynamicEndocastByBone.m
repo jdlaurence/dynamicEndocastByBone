@@ -182,28 +182,34 @@ if nargin == 0 % GUIs
 	'OBJ Export', ...
 	'Yes','No','No');
 % Handle response
-switch answer
-    case 'Yes'
-        objexp = 1;
-        
-        % Get folder for save
-        objFolder = uigetdir(PathName,'Select Folder for obj files');
-        % Make save folders
-        objfoldernames = {};
-        objfoldernames{1} = fullfile(objFolder,'Reference');
-        mkdir(objfoldernames{1});
-        for b = 1:length(bones)
-            objfoldernames{b+1} = fullfile(objFolder,['Frozen_' bones{b}]);
-            mkdir(objfoldernames{b+1});
-        end
-        
-        
-    case 'No'
-        objexp = 0;
-    otherwise
-        objexp = 0;
-        disp('Defaulting to NO export')
-end
+    switch answer
+        case 'Yes'
+            objexp = 1;
+
+            % Get folder for save
+            objFolder = uigetdir(PathName,'Select Folder for obj files');
+            % Make save folders
+            objfoldernames = {};
+            objfoldernames{1} = fullfile(objFolder,'Reference');
+            mkdir(objfoldernames{1});
+            for b = 1:length(bones)
+                objfoldernames{b+1} = fullfile(objFolder,['Frozen_' bones{b}]);
+                mkdir(objfoldernames{b+1});
+            end
+
+
+        case 'No'
+            objexp = 0;
+        otherwise
+            objexp = 0;
+            disp('Defaulting to NO export')
+    end
+    
+    % % Get locator bridge info % % 
+    nbridges = 0; % TO BE CHANGED
+    % bridging settings
+    dist_thresh = 0; % Minimum distance between generated locators
+    max_pts = 10; % Maximum number of  generated locators
     
 elseif nargin ~= 10
     
@@ -567,7 +573,6 @@ if d < dist_thresh
     midpoints = [];
 else
     % calculate first midpoint
-    
     pts = [A; mean([A;B]); B];
     npts = size(pts,1);
     d = norm(pts(1,:)-pts(2,:)) / 2;
